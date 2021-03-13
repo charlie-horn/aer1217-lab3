@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>publisher</name>
+  <name>processor</name>
   <version>0.0.0</version>
-  <description>Package to handle reading and publishing of lab 3 test data</description>
+  <description>Package to handle processing data for lab3</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag --> 
   <!-- Example:  -->

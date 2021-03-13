@@ -9,7 +9,5 @@
 
   <node name="data_publisher" pkg="publisher" 
     type="publisher.py" output="screen" required="True"/>
-  
-  <node name="ros_interface" pkg="publisher" 
-    type="publisher.py" output="screen" required="True"/>
+
 </launch>

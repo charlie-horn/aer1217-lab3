@@ -1,38 +1,44 @@
-
+#!/usr/bin/env python2
+import rosbag
+import rospkg
+import rospy
+from geometry_msgs.msg import Twist, TransformStamped
+from sensor_msgs.msg import Image
 
 class Publisher():
     def __init__(self):
-        self.cam_topic = rospy.Publisher("/lab3_cam", Twist, size="10")
-        self.pos_topic = rospy.Publisher("/lab3_pos", Twist, size="10")
+        self.pub_cam = rospy.Publisher("/lab3_cam", Image, queue_size="0")
+        self.pub_pos = rospy.Publisher("/lab3_pos", TransformStamped, queue_size="0")
+        self.pub_vel = rospy.Publisher("/lab3_vel", Twist, queue_size = "0")
+        self.package = rospkg.RosPack()
+        print(self.package.get_path('publisher'))
+        self.bag = rosbag.Bag(self.package.get_path('publisher') + '/lab3.bag')
         return
 
     def publish_cam(self, msg):
-        msg = Twist()
-        msg.
         pass
 
     def publish_pos(self, msg):
+        pass
+
+    def publish_vel():
         pass
 
 if __name__ == '__main__':
 
     rospy.init_node("publisher", disable_signals=True)
     data_publisher = Publisher()
+
+    # Read bag file
+    for topic, msg, t in data_publisher.bag.read_messages(topics=[]):
+        if topic == "/vicon/ARDroneCarre/ARDroneCarre":
+            data_publisher.pub_pos.publish(msg)
+        elif topic == "/ardrone/bottom/image_raw":
+            data_publisher.pub_cam.publish(msg)
+        elif topic == "/cmd_vel_RHC":
+            data_publisher.pub_vel.publish(msg)
+        else:
+            print("Invalid topic ", topic)
     
-    try:
-        # Read bag file
-        while not rospy.is_shutdown():
-            # Publish data
-
-            # Process Data
-
-    except KeyboardInterrupt:
-
-        # Display final results
-        rospy.spin()
-        
     rospy.spin()
-    
-    rospy.init.node('publisher')
-    Publisher()
-    rospy.spin()
+
