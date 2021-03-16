@@ -30,12 +30,14 @@ class Processor():
         if not pixels:
             return
         else:
-            self.locations.append(self.localizer.localize(pixels, self.pos))
-            self.pub_locations.publish(self.locations[-1])
+            new_locations = self.localizer.localize(pixels, self.pos)
+            self.locations += new_locations
+            self.pub_locations.publish(new_locations)
 
-            print self.locations[-1]
+            print new_locations
             f = open('/home/demi/aer1217/labs/src/processor/location.txt', 'a')
-            f.writelines('\n' + np.array2string(self.locations[-1][0])+' '+ np.array2string(self.locations[-1][1]))
+            for i in range(len(new_locations)):
+                f.writelines('\n' + np.array2string(new_locations[i][0])+' '+ np.array2string(new_locations[i][1]))
             f.close()
 
         return

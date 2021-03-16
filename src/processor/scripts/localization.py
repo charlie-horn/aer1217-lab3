@@ -9,10 +9,12 @@ class Localizer():
     def __init__(self):
         #self.best_guess = np.empty((2,6))
 
-        self.c2b = np.array([[0, -1, 0, 0],
+        self.b2c = np.array([[0, -1, 0, 0],
                              [-1, 0, 0, 0],
                              [0, 0, -1, 0],
                              [0, 0, 0, 1]])
+
+        self.c2b = np.linalg.inv(self.b2c)
 
         self.k_matrix = np.array([[698.86, 0, 306.91],
                                   [0, 699.13, 150.34],
@@ -37,7 +39,7 @@ class Localizer():
         return b2v
 
     def localize(self, pixel, pos):
-        coord = 0
+        coord_list = []
 
         for i in range(len(pixel)):
             pixel_coord = np.array([pixel[i][0], pixel[i][1], 1]).reshape(-1, 1)  # xs, ys
@@ -53,8 +55,9 @@ class Localizer():
             p_vic = np.dot(c2v, p_cam)
 
             coord = p_vic[:2]
+            coord_list.append(coord)
 
-        return coord
+        return coord_list
 
 
 
