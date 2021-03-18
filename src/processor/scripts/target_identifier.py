@@ -26,24 +26,27 @@ class TargetIdentifier():
         return img_undistort
 
     def identify_targets(self, img_original):
-        img = self.img_undist(img_original)
-
-        img2 = cv2.inRange(img, (140, 140, 140), (160, 160, 160))
-
-        _,contours,_ = cv2.findContours(img2, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
-        contour_list = []
-        center_list = []
-        for contour in contours:
-            approx = cv2.approxPolyDP(contour, 0.01 * cv2.arcLength(contour, True), True)
-            area = cv2.contourArea(contour)
-            if ((len(approx) > 8) & (area > 30)):
-                contour_list.append(contour)
-                M = cv2.moments(contour)
-                cX = int(M["m10"] / M["m00"])
-                cY = int(M["m01"] / M["m00"])
-                center_list.append([cX, cY])
-
+          img_undistort = cv2.undistort(img, k_matrix, d, None)
+          img2 = cv2.cvtColor(img_undistort, cv2.COLOR_RGB2GRAY)
+          _,mask = cv2.threshold(img2,140,255,cv2.THRESH_BINARY)
+          img2 = cv2.bitwise_and(img2, img2,mask = mask)
+          contours, _= cv2.findContours(img2, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+          contour_list = []
+          center_list = []
+          cX = 0
+          cY = 0
+          for contour in contours:
+              approx = cv2.approxPolyDP(contour,0.02*cv2.arcLength(contour,True),True)
+              area = cv2.contourArea(approx)
+              (x,y),radius = cv2.minEnclosingCircle(approx)
+              center = (int(x),int(y))
+              radius = int(radius)
+              if (radius > 10 and radius < 23  and area > 500 and area < 1250):
+                  contour_list.append(contour)
+                  M = cv2.moments(contour)
+                  cX = int(M["m10"] / M["m00"])
+                  cY = int(M["m01"] / M["m00"])
+                  center_list.append([cX, cY])
 
 
         # img2 = cv2.inRange(img, (140, 140, 140), (160, 160, 160))
