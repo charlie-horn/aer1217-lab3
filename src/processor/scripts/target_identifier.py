@@ -30,7 +30,7 @@ class TargetIdentifier():
           img2 = cv2.cvtColor(img_undistort, cv2.COLOR_RGB2GRAY)
           _,mask = cv2.threshold(img2,140,255,cv2.THRESH_BINARY)
           img2 = cv2.bitwise_and(img2, img2,mask = mask)
-          contours, _= cv2.findContours(img2, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+          _, contours, _ = cv2.findContours(img2, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
           contour_list = []
           center_list = []
           cX = 0
