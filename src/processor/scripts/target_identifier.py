@@ -47,8 +47,8 @@ class TargetIdentifier():
                   cX = int(M["m10"] / M["m00"])
                   cY = int(M["m01"] / M["m00"])
                   center_list.append([cX, cY])
-
-        return center_list
+          
+          return center_list
     
         # img2 = cv2.inRange(img, (140, 140, 140), (160, 160, 160))
         #
