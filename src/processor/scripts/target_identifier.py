@@ -26,7 +26,7 @@ class TargetIdentifier():
         return img_undistort
 
     def identify_targets(self, img_original):
-          img_undistort = cv2.undistort(img, k_matrix, d, None)
+          img_undistort = cv2.undistort(img_original, self.k_matrix, self.d, None)
           img2 = cv2.cvtColor(img_undistort, cv2.COLOR_RGB2GRAY)
           _,mask = cv2.threshold(img2,140,255,cv2.THRESH_BINARY)
           img2 = cv2.bitwise_and(img2, img2,mask = mask)
@@ -48,7 +48,8 @@ class TargetIdentifier():
                   cY = int(M["m01"] / M["m00"])
                   center_list.append([cX, cY])
 
-
+        return center_list
+    
         # img2 = cv2.inRange(img, (140, 140, 140), (160, 160, 160))
         #
         # _, contours, _ = cv2.findContours(binary_img, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -71,5 +72,3 @@ class TargetIdentifier():
         #         center_list.append((int(x), int(y)))
         #         rad_list.append(radius)
         #         contour_list.append(contour)
-
-        return center_list
