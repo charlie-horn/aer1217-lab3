@@ -22,7 +22,7 @@ class Cluster():
                 if dist < self.threshold:
                     cluster.append(location)
                     center = self.calc_center(cluster)  # update center
-                    self.clusters[j] = {'center': center, 'cluster': cluster}
+                    self.clusters[j] = {'center': center, 'cluster': cluster} # update cluster
                     found = True
                     break
             # create new cluster if the point does not belong to any clusters
