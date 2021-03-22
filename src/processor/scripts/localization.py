@@ -8,14 +8,17 @@ from tf.transformations import euler_from_quaternion, quaternion_from_euler, qua
 class Localizer():
     def __init__(self):
         #self.best_guess = np.empty((2,6))
-
+        
+        # T_cb
         self.b2c = np.array([[0, -1, 0, 0],
                              [-1, 0, 0, 0],
                              [0, 0, -1, 0],
                              [0, 0, 0, 1]])
-
+        
+        # T_bc
         self.c2b = np.linalg.inv(self.b2c)
-
+        
+        # camera intrinsic matrix 
         self.k_matrix = np.array([[698.86, 0, 306.91],
                                   [0, 699.13, 150.34],
                                   [0, 0, 1]])
@@ -24,6 +27,7 @@ class Localizer():
 
 
     def transform_b2v(self, pos):
+        # T_vb
         b2v = np.identity(4)
         b2v[0, 3] = pos.transform.translation.x
         b2v[1, 3] = pos.transform.translation.y
@@ -47,14 +51,15 @@ class Localizer():
             xn = normal_proj[0][0]
             yn = normal_proj[1][0]
 
-            b2v = self.transform_b2v(pos)
-            c2v = b2v.dot(self.c2b)
+            b2v = self.transform_b2v(pos) # T_vb
+            c2v = b2v.dot(self.c2b) # T_vc
 
-            z = pos.transform.translation.z ### need discuss
-            p_cam = np.array([xn*z, yn*z, z, 1])
-            p_vic = np.dot(c2v, p_cam)
+            z = pos.transform.translation.z # height of the drone
+            
+            p_cam = np.array([xn*z, yn*z, z, 1]) # location of camera frame
+            p_vic = np.dot(c2v, p_cam) # transform from camera frame to vicon frame
 
-            coord = p_vic[:2]
+            coord = p_vic[:2] # 2D coordinates
             coord_list.append(coord)
 
         return coord_list
