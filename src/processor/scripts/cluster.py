@@ -50,7 +50,7 @@ class Cluster():
         return np.mean(np.array(cluster), axis=0)
 
     def find_cluster(self, clusters, threshold):
-        # find good clusters
+        # find good clusters 
         new_clusters = []
         for i in range(len(clusters)):
             cluster = clusters[i]['cluster']
