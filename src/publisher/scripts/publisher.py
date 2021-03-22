@@ -4,6 +4,8 @@ import rospkg
 import rospy
 from geometry_msgs.msg import Twist, TransformStamped
 from sensor_msgs.msg import Image
+import subprocess
+import time
 
 class Publisher():
     def __init__(self):
@@ -28,17 +30,25 @@ if __name__ == '__main__':
 
     rospy.init_node("publisher", disable_signals=True)
     data_publisher = Publisher()
-
-    # Read bag file
-    for topic, msg, t in data_publisher.bag.read_messages(topics=[]):
-        if topic == "/vicon/ARDroneCarre/ARDroneCarre":
-            data_publisher.pub_pos.publish(msg)
-        elif topic == "/ardrone/bottom/image_raw":
-            data_publisher.pub_cam.publish(msg)
-        elif topic == "/cmd_vel_RHC":
-            data_publisher.pub_vel.publish(msg)
-        else:
-            print("Invalid topic ", topic)
+    package = rospkg.RosPack()
+    bag_play = subprocess.Popen(["rosbag", "play", package.get_path('publisher') + '/lab3.bag'])
+    try:
+        while bag_play.poll() is None:
+            time.sleep(1)
+        #bag_play.kill()
+    except KeyboardInterrupt:
+        bag_play.kill()
     
-    rospy.spin()
 
+    
+    # Read bag file
+    #for topic, msg, t in data_publisher.bag.read_messages(topics=[]):
+    #    continue
+    #    if topic == "/vicon/ARDroneCarre/ARDroneCarre":
+    #        data_publisher.pub_pos.publish(msg)
+    #    elif topic == "/ardrone/bottom/image_raw":
+    #        data_publisher.pub_cam.publish(msg)
+    #    elif topic == "/cmd_vel_RHC":
+    #        data_publisher.pub_vel.publish(msg)
+    #    else:
+    #        print("Invalid topic ", topic)
