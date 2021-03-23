@@ -7,12 +7,27 @@
 
 # -------------- Code Structure ----------------
 
-1. Publisher
+1. Publisher (intended to be removable when data is being provided by the vicon simulator)
+  - publisher.launch
+    File to be launched to run the simulation
+    Launches processor.launch
+  - package.xml
   - publisher.py
+    Initializes node
+    Plays the .bag file
+    Handles exceptions and shuts down publisher node
 
 2. Processor 
+  - procesor.launch
+  - package.xml
+    Requires publisher node to be active
   - processor.py
-  
+    Initializes node
+    Subscribes to image and position feed
+    Filters certain frames
+    Calls target_identifier.py on quality frames
+    Calls localization.py on target_identifier.py results
+    Calls cluster.py to determine the final target guesses
   
   - target_identifier.py
     Given araw image, undistort the image, identify pixel coordinates of targets. 
