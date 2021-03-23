@@ -4,6 +4,7 @@
 2. Put the bag file, "lab3.bag" in "<path>/aer1217-lab3/src/publisher/"
 3. Run "roslaunch <path>/aer1217-lab3/src/publisher/launch/publisher.launch"
 
+
 # -------------- Code Structure ----------------
 
 1. Publisher
